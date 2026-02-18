@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BLIND ESTIMATE v1.0</title>
+<title>BLIND ESTIMATE</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -31,7 +31,7 @@
     overflow-x: hidden;
   }
 
-  /* FIXED: Changed Z-INDEX to -1 so overlays don't block clicks */
+  /* FIXED: Changed Z-INDEX to -1 so overlays don't block mobile clicks */
   body::before {
     content: '';
     position: fixed;
@@ -64,7 +64,7 @@
     justify-content: center;
     flex-direction: column;
     gap: 16px;
-    touch-action: none;
+    touch-action: none; /* Prevents scroll during hold */
   }
   #blackout.active { display: flex; }
   #blackout-player { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.4rem,4vw,2.5rem); letter-spacing:0.2em; color:#151515; }
@@ -88,139 +88,4 @@
     align-items: flex-end;
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  .logo { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:0.2em; color:var(--neon); text-shadow:var(--glow); line-height:1; }
-  .logo span { color:var(--neon2); text-shadow:var(--glow2); }
-  .tagline { font-size:0.6rem; color:var(--muted); letter-spacing:0.3em; text-transform:uppercase; margin-top:4px; }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2.5rem;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 1.5rem;
-  }
-  .card::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:linear-gradient(90deg,var(--neon2),var(--neon),transparent); }
-
-  .section-title {
-    font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.25em;
-    color:var(--neon); text-shadow:var(--glow); margin-bottom:1.5rem;
-    display:flex; align-items:center; gap:1rem;
-  }
-  .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
-
-  label { font-size:0.65rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; display:block; margin-bottom:6px; }
-  
-  /* FIXED: Font-size 16px to prevent iOS auto-zoom */
-  input[type="text"] {
-    background:var(--bg); border:1px solid var(--border); color:var(--text);
-    font-family:'Space Mono',monospace; font-size:16px; padding:10px 14px;
-    border-radius:3px; outline:none; transition:border-color .2s,box-shadow .2s; width:100%;
-  }
-
-  .btn {
-    background:transparent; border:1px solid var(--neon); color:var(--neon);
-    font-family:'Space Mono',monospace; font-size:0.75rem; padding:10px 22px;
-    letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; border-radius:3px;
-    transition:background .2s,box-shadow .2s; white-space:nowrap;
-    touch-action: manipulation;
-  }
-  
-  /* Media query to prevent sticky hover on touch */
-  @media (hover: hover) {
-    .btn:hover { background:rgba(0,245,212,.08); box-shadow:var(--glow); }
-    #hold-btn:hover { box-shadow:var(--glow2),inset 0 0 20px rgba(247,37,133,.08); }
-  }
-
-  .btn.pink { border-color:var(--neon2); color:var(--neon2); }
-  .btn.lg { font-family:'Bebas Neue',sans-serif; font-size:1.15rem; padding:14px 40px; letter-spacing:0.3em; }
-
-  #hold-btn {
-    display:block; width:100%; max-width:360px; margin:0 auto;
-    background:transparent; border:2px solid var(--neon2); color:var(--neon2);
-    font-family:'Bebas Neue',sans-serif; font-size:3rem; letter-spacing:.3em; padding:1.3rem 2rem;
-    cursor:pointer; border-radius:4px; transition:all .15s;
-    position:relative; overflow:hidden; user-select:none; -webkit-user-select:none; 
-    touch-action:none; 
-  }
-  #hold-btn::before { content:''; position:absolute; inset:0; background:var(--neon2); transform:translateY(101%); transition:transform .12s; }
-  #hold-btn span { position:relative; z-index:1; pointer-events:none; }
-  #hold-btn.pressing { color:#000; box-shadow:0 0 50px rgba(247,37,133,.9); transform:scale(.975); }
-  #hold-btn.pressing::before { transform:translateY(0); }
-</style>
-</head>
-<body>
-
-<div id="blackout">
-  <div id="blackout-player"></div>
-  <div id="blackout-msg">HOLDING...</div>
-  <div id="blackout-hint">Release when you think the time is up</div>
-</div>
-
-<div id="app">
-  <header>
-    <div>
-      <div class="logo">BLIND<span>ESTIMATE</span></div>
-      <div class="tagline">Can you feel time?</div>
-    </div>
-  </header>
-
-  <div id="lobby-screen" class="screen active">
-    <div class="card">
-      <div class="section-title">Register Players</div>
-      <input type="text" id="lobby-input" placeholder="Enter name..." maxlength="20">
-      <div style="margin-top:20px; display:flex; gap:10px;">
-        <button class="btn" id="add-player-btn">ADD</button>
-        <button class="btn lg pink" id="start-game-btn">START GAME</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="game-screen" class="screen">
-    <div class="card">
-        <div class="target-label" style="text-align:center">Target Time</div>
-        <div id="target-display" style="font-family:'Bebas Neue'; font-size:8rem; color:var(--neon3); text-align:center">5.0</div>
-        <button id="hold-btn"><span>HOLD</span></button>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Simplified state for demonstration - replace with your full original logic
-  const holdBtn = document.getElementById('hold-btn');
-  const blackout = document.getElementById('blackout');
-  const lobbyScreen = document.getElementById('lobby-screen');
-  const gameScreen = document.getElementById('game-screen');
-  const startBtn = document.getElementById('start-game-btn');
-
-  function startPress(e) {
-    if (e.cancelable) e.preventDefault();
-    holdBtn.classList.add('pressing');
-    blackout.classList.add('active');
-    document.getElementById('blackout-player').textContent = "PLAYER 1";
-  }
-
-  function endPress(e) {
-    if (e.cancelable) e.preventDefault();
-    holdBtn.classList.remove('pressing');
-    blackout.classList.remove('active');
-    alert("You released!");
-  }
-
-  startBtn.addEventListener('click', () => {
-    lobbyScreen.classList.remove('active');
-    gameScreen.classList.add('active');
-  });
-
-  // FIXED: Using Pointer Events for universal compatibility
-  holdBtn.addEventListener('pointerdown', startPress);
-  window.addEventListener('pointerup', (e) => {
-    if(holdBtn.classList.contains('pressing')) endPress(e);
-  });
-</script>
-</body>
-</html>
+    padding-bottom: 1.
