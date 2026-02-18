@@ -318,17 +318,12 @@
 
   /* ── NT SCREEN ── */
   /* ── MOBILE TOUCH ── */
-  * { -webkit-tap-highlight-color: transparent; }
-  html, body { touch-action: pan-y; } /* allow vertical scroll everywhere by default */
-
-  #nt-screen { touch-action: pan-y; } /* screen itself scrollable */
-
-  /* Canvas wrapper and canvas: block ALL touch actions so gestures go to JS */
-  #nt-canvas-wrap { touch-action: none; user-select: none; -webkit-user-select: none; }
-  #nt-canvas { display:block; width:100%; touch-action: none; user-select: none; -webkit-user-select: none; }
-
-  /* Hold button: prevent tap highlight and text selection on mobile */
-  #hold-btn { -webkit-user-select: none; user-select: none; touch-action: none; }
+  /* Remove tap delay on all interactive elements */
+  * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  /* Restore normal scroll on containers */
+  html, body, #app, .screen { touch-action: pan-y pinch-zoom; }
+  /* Canvas must block ALL gestures so JS handles them */
+  #nt-canvas-wrap, #nt-canvas { touch-action: none !important; user-select: none; -webkit-user-select: none; }
 
   #nt-turn-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:1rem; }
   #nt-queue { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem; }
