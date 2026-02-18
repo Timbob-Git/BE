@@ -120,7 +120,7 @@
   label { font-size:0.65rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; display:block; margin-bottom:6px; }
   input[type="text"] {
     background:var(--bg); border:1px solid var(--border); color:var(--text);
-    font-family:'Space Mono',monospace; font-size:0.9rem; padding:10px 14px;
+    font-family:'Space Mono',monospace; font-size:1rem; padding:10px 14px;
     border-radius:3px; outline:none; transition:border-color .2s,box-shadow .2s; width:100%;
   }
   input[type="text"]:focus { border-color:var(--neon); box-shadow:0 0 0 2px rgba(0,245,212,.1); }
@@ -199,7 +199,7 @@
     background:transparent; border:2px solid var(--neon2); color:var(--neon2);
     font-family:'Bebas Neue',sans-serif; font-size:3rem; letter-spacing:.3em; padding:1.3rem 2rem;
     cursor:pointer; border-radius:4px; transition:all .15s;
-    position:relative; overflow:hidden; user-select:none; -webkit-user-select:none; touch-action:none;
+    position:relative; overflow:hidden; user-select:none; -webkit-user-select:none; touch-action:manipulation;
   }
   #hold-btn::before { content:''; position:absolute; inset:0; background:var(--neon2); transform:translateY(101%); transition:transform .12s; }
   #hold-btn span { position:relative; z-index:1; }
@@ -317,13 +317,11 @@
   .mode-pill.active-pink .mode-pill-name { color:var(--neon2); text-shadow:var(--glow2); }
 
   /* ── NT SCREEN ── */
-  /* ── MOBILE TOUCH ── */
-  /* Remove tap delay on all interactive elements */
-  * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-  /* Restore normal scroll on containers */
-  html, body, #app, .screen { touch-action: pan-y pinch-zoom; }
-  /* Canvas must block ALL gestures so JS handles them */
-  #nt-canvas-wrap, #nt-canvas { touch-action: none !important; user-select: none; -webkit-user-select: none; }
+  /* ── MOBILE ── */
+  /* Remove 300ms tap delay on buttons only — do NOT touch inputs or body */
+  button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  /* Canvas blocks all gestures so JS draw handlers receive them */
+  #nt-canvas-wrap, #nt-canvas { touch-action: none; user-select: none; -webkit-user-select: none; }
 
   #nt-turn-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:1rem; }
   #nt-queue { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem; }
