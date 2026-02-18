@@ -304,6 +304,8 @@
     background:var(--bg); border:1px solid var(--border); border-radius:4px;
     padding:1rem 1.2rem; cursor:pointer; transition:all .2s; text-align:left;
     position:relative; overflow:hidden;
+    font-family:inherit; color:inherit;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
   }
   .mode-pill::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:var(--border); transition:background .2s; }
   .mode-pill.active { border-color:var(--neon); box-shadow:0 0 0 1px rgba(0,245,212,.15); }
@@ -451,7 +453,7 @@
       <div class="add-row">
         <div>
           <label for="lobby-input">Player Name</label>
-          <input type="text" id="lobby-input" placeholder="Type a name and press Add…" maxlength="20" />
+          <input type="text" id="lobby-input" placeholder="Type a name…" maxlength="20" enterkeyhint="done" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" />
         </div>
         <button class="btn" id="add-player-btn">ADD</button>
       </div>
@@ -461,16 +463,16 @@
       <div style="margin-bottom:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
         <label style="margin-bottom:.75rem;">Game Mode</label>
         <div class="mode-selector">
-          <div class="mode-pill active" id="mode-blind" data-mode="blind">
+          <button class="mode-pill active" id="mode-blind" data-mode="blind">
             <div class="mode-pill-icon">⏱</div>
             <span class="mode-pill-name">Blind Estimate</span>
             <div class="mode-pill-desc">Hold a button for the target time</div>
-          </div>
-          <div class="mode-pill" id="mode-trace" data-mode="trace">
+          </button>
+          <button class="mode-pill" id="mode-trace" data-mode="trace">
             <div class="mode-pill-icon">〰</div>
             <span class="mode-pill-name">Neon Trace</span>
             <div class="mode-pill-desc">Memorise &amp; retrace the hidden path</div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -782,7 +784,7 @@ function addPlayer() {
   players.push({ name });
   savePlayers();
   lobbyInput.value = '';
-  lobbyInput.focus();
+  lobbyInput.blur(); // dismiss mobile keyboard so buttons are reachable
   renderRoster();
 }
 
@@ -1014,7 +1016,6 @@ document.getElementById('play-again-btn').onclick = () => {
   renderRoster();
   showScreen('lobby-screen');
   checkForSavedGame();
-  lobbyInput.focus();
 };
 
 // ── MENU BUTTON ──
